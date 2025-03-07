@@ -27,15 +27,17 @@ jobs:
       - name: Sync libcontainer from youki
         run: |
           git checkout youki/main -- crates/libcontainer
-          git mv crates/libcontainer/* project/libcontainer || true
-          git add project
-          git commit -m "Sync libcontainer from youki"
-          git push
+          rsync -a --delete crates/libcontainer/ project/libcontainer/
+          rm -rf crates/libcontainer  
+          git add project/libcontainer
+          git commit -m "Sync libcontainer from youki" || echo "No changes to commit"
+          git push || echo "No changes to push"
 
       - name: Sync libcgroups from youki
         run: |
           git checkout youki/main -- crates/libcgroups
-          git mv crates/libcgroups/* project/libcgroups || true
-          git add project
-          git commit -m "Sync libcgroups from youki"
-          git push
+          rsync -a --delete crates/libcontainer/ project/libcgroups/
+          rm -rf crates/libcgroups  
+          git add project/libcgroups
+          git commit -m "Sync libcgroups from youki" || echo "No changes to commit"
+          git push || echo "No changes to push"
