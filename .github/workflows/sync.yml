@@ -36,7 +36,7 @@ jobs:
       - name: Sync libcgroups from youki
         run: |
           git checkout youki/main -- crates/libcgroups
-          rsync -a --delete crates/libcontainer/ project/libcgroups/
+          rsync -a --delete crates/libcgroups/ project/libcgroups/
           rm -rf crates/libcgroups  
           git add project/libcgroups
           git commit -m "Sync libcgroups from youki" || echo "No changes to commit"
