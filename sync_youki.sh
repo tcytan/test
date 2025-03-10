@@ -51,16 +51,16 @@ sync_module() {
 
     git worktree remove "$temp_dir"
 
-    if git status --porcelain "$target_path" | grep -q .; then
-        git add "$target_path"
-        git commit -m "Sync $module from youki"
-        echo "Changes committed for $module."
-    else
-        echo "No changes to commit for $module."
-    fi
 }
 
 sync_module "libcontainer"
 sync_module "libcgroups"
 
+if git status --porcelain "$target_path" | grep -q .; then
+        git add "$target_path"
+        git commit -m "Sync $module from youki"
+        echo "Changes committed for $module."
+    else
+        echo "No changes to commit for $module."
+fi
 echo "Sync youki complete."
