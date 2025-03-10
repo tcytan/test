@@ -17,7 +17,7 @@ use super::{systemd, v1, v2};
 
 pub const CGROUP_PROCS: &str = "cgroup.procs";
 pub const DEFAULT_CGROUP_ROOT: &str = "/sys/fs/cgroup";
-//1231231321
+
 #[cfg(feature = "systemd")]
 #[inline]
 fn is_true_root() -> Result<bool, WrappedIoError> {
