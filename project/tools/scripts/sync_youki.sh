@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+cd "$(dirname "$0")/../../"
+
 echo "Setting up Git configuration..."
 git config --local user.name "GitHub Actions"
 git config --local user.email "actions@github.com"
@@ -19,7 +21,11 @@ check_diff() {
     echo "Checking differences for $module..."
     
     echo "Git diff for $module:"
-    git diff --stat youki/main -- "crates/$module" "project/$module" || echo "No differences found."
+    if git diff --stat youki/main -- "crates/$module" "project/$module" | grep -q .; then
+        echo "Differences found."
+    else
+        echo "No differences found."
+    fi
 }
 
 check_diff "libcontainer"
@@ -36,7 +42,7 @@ fi
 sync_module() {
     local module=$1
     local source_path="crates/$module"
-    local target_path="project/$module"
+    local target_path="$module"
 
     echo "Syncing $module from youki..."
 
@@ -56,6 +62,12 @@ sync_module() {
 
 sync_module "libcontainer"
 sync_module "libcgroups"
+
+echo "Applying patch to comment out code in container_init_process.rs..."
+patch -p1 < "./tools/scripts/container_init_process.patch" || {
+    echo "Failed to apply patch"
+    exit 1
+}
 
 git commit -m "Sync $module from youki"
 echo "Changes committed for $module."
